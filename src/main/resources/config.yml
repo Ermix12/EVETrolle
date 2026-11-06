@@ -1,0 +1,408 @@
+# ============================================================
+#  EVETrolle - config.yml  (Paper 1.21.11 / Java 21)
+#  Wszystkie trolle są WYŁĄCZNIE wizualne i dźwiękowe, działają
+#  tylko po stronie wybranego gracza i nie zmieniają świata.
+#  Kolory: kody & (także &#RRGGBB) albo MiniMessage (<red>...).
+# ============================================================
+
+settings:
+  log-to-console: true            # loguj użycie trolli w konsoli
+  notify-admins: true             # powiadamiaj graczy z evetrolle.notify
+  allow-self-troll: true          # czy można trollować samego siebie (do testów)
+  replace-active-troll: true      # nowy troll zastępuje aktywny na tym samym graczu
+  cooldown-seconds: 5             # cooldown na wykonawcę i trolla (evetrolle.admin pomija)
+  max-active-sessions: 25         # maks. jednoczesnych trolli na serwerze
+  max-entities-per-session: 40    # limit prywatnych encji (displaye/postacie) na jeden troll
+  particle-multiplier: 1.0        # mnożnik ilości particle (np. 0.5 dla słabszych klientów)
+  bossbar-enabled: true           # BossBar z odliczaniem
+  stop-on-world-change: true      # zakończ trolla przy zmianie świata
+  stop-on-death: true             # zakończ trolla przy śmierci gracza
+  disabled-worlds: []             # światy, w których trolle są zablokowane
+
+# ------------------------------------------------------------
+#  GUI
+# ------------------------------------------------------------
+gui:
+  title: "&cEVETrolle"            # tytuł menu z trollami
+  rows: 6                         # 3-6
+  close-on-use: true
+  click-sound: "ui.button.click 0.6 1.2"
+  filler:
+    enabled: true
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+  player-menu:
+    title: "&cEVETrolle &8» &7Wybierz gracza &8({page}/{pages})"
+    head-name: "&e{player}"
+    head-lore:
+      - "&7Świat: &f{world}"
+      - "&7Ping: &f{ping}ms"
+      - " "
+      - "&eKliknij, aby wybrać"
+  troll-menu:
+    info-name: "&e{target}"
+    info-lore:
+      - "&7Wybrany cel trolla"
+    lore-footer:
+      - " "
+      - "&7Czas: &f{duration}s"
+      - "&eKliknij, aby użyć na &f{target}"
+    locked-lore:
+      - " "
+      - "&cBrak uprawnień do tego trolla"
+  buttons:                        # slot < 0 = przycisk ukryty
+    info:
+      slot: 4
+    back:
+      slot: 45
+      material: ARROW
+      name: "&e« Wybór gracza"
+    close:
+      slot: 49
+      material: BARRIER
+      name: "&cZamknij"
+    stop:
+      slot: 53
+      material: REDSTONE_BLOCK
+      name: "&cZatrzymaj trolla"
+      lore:
+        - "&7Natychmiast kończy aktywnego trolla"
+    prev:
+      slot: 48
+      material: ARROW
+      name: "&e« Poprzednia strona"
+    next:
+      slot: 50
+      material: ARROW
+      name: "&eNastępna strona »"
+
+# ------------------------------------------------------------
+#  Trolle wbudowane
+#  enabled / slot / material / name / lore / duration (sekundy) / permission (opcjonalne)
+#  options: ustawienia danego trolla (teksty, dźwięki w formacie "klucz głośność wysokość")
+# ------------------------------------------------------------
+trolls:
+  fake-ban:
+    enabled: true
+    slot: 10
+    material: BARRIER
+    name: "&c&lFake Ban"
+    lore:
+      - "&7Wyświetla fałszywy ekran"
+      - "&7permanentnego bana."
+    duration: 10
+    permission: ""
+    options:
+      reason: "Cheating (X-Ray)"
+      clear-chat-lines: 25
+      title: "&4&lPERMANENTNY BAN"
+      subtitle: "&cTwoje konto zostało zablokowane"
+      title-stay: 6
+      sound: "block.anvil.land 1 0.5"
+      reveal: true
+      reveal-message: "&a&lTo był tylko żart administracji! &7Nic Ci nie grozi."
+      # UWAGA: prawdziwe rozłączenie (kick) - gracz może od razu wrócić. Domyślnie wyłączone.
+      disconnect: false
+      # lines: [ ... ]   # własny wygląd ekranu; placeholdery: {reason} {admin} {date} {ban-id} {player}
+  fake-crash:
+    enabled: true
+    slot: 11
+    material: COMMAND_BLOCK
+    name: "&e&lFake Crash"
+    lore:
+      - "&7Wyświetla realistyczny komunikat"
+      - "&7crasha klienta."
+    duration: 10
+    options:
+      clear-chat-lines: 20
+      line-delay-ticks: 1
+      sound: "block.glass.break 1 0.6"
+      reveal: true
+      reveal-message: "&a&lNic się nie stało - to tylko troll! &7Twoja gra działa normalnie."
+      disconnect: false
+      disconnect-message: "&fInternal Exception: java.io.IOException: An existing connection was forcibly closed by the remote host"
+  herobrine:
+    enabled: true
+    slot: 12
+    material: PLAYER_HEAD
+    name: "&b&lHerobrine"
+    lore:
+      - "&7Pojawia się za graczem"
+      - "&7i znika po kilku sekundach."
+    duration: 12
+    options:
+      distance: 4.0
+      stay-seconds: 5
+      vanish-on-look: true
+      look-angle: 20
+      eyes: true                    # białe, świecące oczy (wyświetlane bloki)
+      head-name: "Herobrine"
+      texture: ""                   # base64 tekstury skina (opcjonalnie) - patrz README
+      appear-sound: "ambient.cave 1 0.7"
+      step-sound: "block.stone.step 1 0.6"
+      vanish-sound: "entity.enderman.teleport 0.8 0.5"
+      bossbar: false
+  tnt-rain:
+    enabled: true
+    slot: 13
+    material: TNT
+    name: "&c&lFake TNT Rain"
+    lore:
+      - "&7Deszcz TNT spadający z nieba."
+      - "&7Bez eksplozji."
+    duration: 12
+    options:
+      radius: 14
+      height: 28
+      per-wave: 3
+      wave-interval-ticks: 3
+      fall-speed: 1.0
+      max-drops: 60
+      title: "&c&lDESZCZ TNT"
+      subtitle: "&7Uciekaj... a może nie?"
+      start-sound: "entity.tnt.primed 1 0.8"
+      land-sound: "block.stone.break 0.4 0.8"
+  meteor:
+    enabled: true
+    slot: 14
+    material: MAGMA_BLOCK
+    name: "&6&lMeteoryt"
+    lore:
+      - "&7Gigantyczny meteoryt"
+      - "&7lecący w stronę gracza."
+    duration: 10
+    options:
+      impact-distance: 24
+      start-distance: 32
+      start-height: 42
+      flight-ticks: 70
+      size: 9
+      title: "&6&lMETEORYT"
+      subtitle: "&7Nadlatuje..."
+      start-sound: "entity.ghast.shoot 1 0.5"
+      flight-sound: "item.firecharge.use 3 0.5"
+      impact-sound: "entity.generic.explode 5 0.6"
+  abyss:
+    enabled: true
+    slot: 15
+    material: END_PORTAL_FRAME
+    name: "&5&lOtchłań"
+    lore:
+      - "&7Czarne niebo, fioletowe particle"
+      - "&7i dźwięki Endu."
+    duration: 15
+    options:
+      time: 18000
+      darkness-effect: false        # true = dodatkowo efekt Darkness (efekt potiona widoczny dla serwera)
+      particle-density: 1.0
+      title: "&5&lOTCHŁAŃ"
+      subtitle: "&dEnd cię woła..."
+      start-sound: "block.end_portal.spawn 0.4 0.5"
+      sounds:
+        - "entity.enderman.stare 0.8 0.6"
+        - "block.portal.ambient 0.7 0.7"
+        - "entity.ender_dragon.growl 0.5 0.6"
+        - "entity.enderman.ambient 0.8 0.5"
+        - "ambient.cave 0.9 0.6"
+  blood-moon:
+    enabled: true
+    slot: 16
+    material: RED_DYE
+    name: "&4&lKrwawy Księżyc"
+    lore:
+      - "&7Niebo staje się czerwone,"
+      - "&7pojawia się mgła i particle."
+    duration: 15
+    options:
+      time: 18000
+      particle-density: 1.0
+      title: "&4&lKRWAWY KSIĘŻYC"
+      subtitle: "&cNoc pełna krwi..."
+      start-sound: "entity.wither.spawn 0.25 0.5"
+      sounds:
+        - "ambient.cave 0.9 0.7"
+        - "entity.wither.ambient 0.3 0.6"
+        - "entity.wolf.growl 0.6 0.5"
+        - "block.bell.use 0.4 0.5"
+  wolf:
+    enabled: true
+    slot: 19
+    material: BONE
+    name: "&8&lWilk w Ciemności"
+    lore:
+      - "&7W oddali pojawiają się świecące"
+      - "&7oczy i słychać wycie."
+    duration: 20
+    options:
+      set-night: true
+      time: 18000
+      min-distance: 22
+      max-distance: 34
+      eye-material: YELLOW_CONCRETE
+      title: "&8&lCoś cię obserwuje..."
+      subtitle: ""
+      howl-sounds:
+        - "entity.wolf.howl 3 0.7"
+        - "entity.wolf.growl 1.5 0.5"
+  stalker:
+    enabled: true
+    slot: 20
+    material: SPYGLASS
+    name: "&0&lStalker"
+    lore:
+      - "&7Losowy NPC obserwuje gracza"
+      - "&7z różnych miejsc."
+    duration: 40
+    options:
+      min-distance: 16
+      max-distance: 26
+      look-angle: 14
+      look-ticks: 3
+      reappear-min-ticks: 60
+      reappear-max-ticks: 140
+      lifetime-ticks: 160
+      head-name: "Steve"
+      texture: ""
+      appear-sound: "block.grass.step 0.6 0.6"
+  screen-takeover:
+    enabled: true
+    slot: 21
+    material: ENDER_EYE
+    name: "&4&lPrzejęcie Ekranu"
+    lore:
+      - "&7Title i ActionBary:"
+      - "&c\"JA CIĘ WIDZĘ\"  \"NIE OGLĄDAJ SIĘ\""
+      - "&c\"JESTEM ZA TOBĄ\""
+    duration: 12
+    options:
+      interval-ticks: 36
+      title-format: "&4&l{msg}"
+      actionbar-format: "&c&l{msg}"
+      messages:
+        - "JA CIĘ WIDZĘ"
+        - "NIE OGLĄDAJ SIĘ"
+        - "JESTEM ZA TOBĄ"
+      sounds:
+        - "entity.warden.heartbeat 1 1"
+        - "entity.warden.nearby_close 0.8 1"
+        - "ambient.cave 1 0.8"
+  scary-sounds:
+    enabled: true
+    slot: 22
+    material: SCULK_SHRIEKER
+    name: "&5&lStraszne Dźwięki"
+    lore:
+      - "&7Cave sounds, Warden,"
+      - "&7szepty i kroki."
+    duration: 20
+    options:
+      interval-min-ticks: 25
+      interval-max-ticks: 70
+      sounds:
+        - "ambient.cave 1 1"
+        - "entity.warden.heartbeat 1 1"
+        - "entity.warden.nearby_close 0.8 1"
+        - "entity.warden.listening 0.7 1"
+        - "entity.warden.ambient 0.8 0.8"
+        - "entity.warden.sniff 0.8 1"
+      whispers:
+        - "ambient.soul_sand_valley.additions 0.8 1"
+        - "entity.vex.ambient 0.6 0.5"
+        - "ambient.crimson_forest.additions 0.8 0.7"
+      footsteps:
+        - "block.stone.step 1 0.9"
+        - "block.gravel.step 1 0.8"
+        - "block.grass.step 1 0.8"
+        - "block.wood.step 1 0.9"
+  streamer-mode:
+    enabled: true
+    slot: 23
+    material: GLOW_ITEM_FRAME
+    name: "&d&lFake Streamer Mode"
+    lore:
+      - "&7Na ekranie pojawiają się"
+      - "&7fałszywe wiadomości administracji."
+    duration: 20
+    options:
+      interval-ticks: 60
+      format: "&8[&4Administracja&8] &c{msg}"
+      title: "&c&l● LIVE"
+      subtitle: "&7Wiadomości od administracji"
+      sound: "block.note_block.pling 1 1.5"
+      messages:
+        - "Wykryto podejrzaną aktywność na Twoim koncie."
+        - "Trwa weryfikacja Twojego klienta przez AntiCheat."
+        - "Nie wylogowuj się - sprawa jest w toku."
+        - "Zrób zrzut ekranu (F3) i wyślij go na kanał #support."
+        - "Czy to na pewno Ty grasz na tym koncie?"
+        - "Jesteś na żywo - 12 438 widzów obserwuje ten stream."
+  herobrine-invasion:
+    enabled: true
+    slot: 24
+    material: WITHER_SKELETON_SKULL
+    name: "&b&lInwazja Herobrine"
+    lore:
+      - "&7Kilku Herobrine pojawia się"
+      - "&7wokół gracza."
+    duration: 15
+    options:
+      count: 7
+      radius-min: 5
+      radius-max: 9
+      spawn-interval-ticks: 10
+      eyes: true
+      head-name: "Herobrine"
+      texture: ""
+      title: "&b&lINWAZJA"
+      subtitle: "&7Nie jesteś sam..."
+      appear-sound: "entity.enderman.stare 0.8 0.6"
+  end-of-world:
+    enabled: true
+    slot: 25
+    material: DRAGON_EGG
+    name: "&4&lKoniec Świata"
+    lore:
+      - "&7Spadają meteoryty, błyskawice"
+      - "&7i pojawia się masa particle."
+    duration: 25
+    options:
+      time: 16000
+      particle-density: 1.0
+      meteor-size: 5
+      meteor-flight-ticks: 45
+      meteor-interval-min-ticks: 18
+      meteor-interval-max-ticks: 40
+      lightning-interval-min-ticks: 25
+      lightning-interval-max-ticks: 55
+      title: "&4&lKONIEC ŚWIATA"
+      subtitle: "&cTo już koniec..."
+      start-sound: "entity.wither.spawn 0.35 0.5"
+      start-sound-2: "entity.ender_dragon.growl 0.8 0.6"
+      flight-sound: "item.firecharge.use 2 0.5"
+      impact-sound: "entity.generic.explode 4 0.7"
+      thunder-sound: "entity.lightning_bolt.thunder 8 1"
+      bolt-impact-sound: "entity.lightning_bolt.impact 4 1"
+
+# ------------------------------------------------------------
+#  Własne trolle (bez programowania)
+#  Akcje: [TITLE] tytuł;podtytuł[;fadeIn;stay;fadeOut]  [ACTIONBAR] tekst  [CHAT] tekst
+#         [SOUND] klucz głośność wysokość  [PARTICLE] NAZWA ilość rozrzut prędkość
+#         [BOSSBAR] tekst  [DELAY] ticki
+#  Placeholdery: {player} {admin} oraz PlaceholderAPI (%...%).
+#  Własne trolle w Javie: patrz README (EVETrolleAPI).
+# ------------------------------------------------------------
+custom-trolls:
+  update-notch:
+    enabled: true
+    material: PAPER
+    name: "&b&lWiadomość od Notcha"
+    lore:
+      - "&7Przykładowy własny troll"
+      - "&7zdefiniowany w config.yml."
+    duration: 8
+    actions:
+      - "[SOUND] ui.toast.challenge_complete 1 1"
+      - "[TITLE] &6&lOsiągnięcie odblokowane;&7Zostałeś wybrany przez administrację"
+      - "[DELAY] 40"
+      - "[CHAT] &e{player} &7otrzymał osiągnięcie &a[Szczęściarz]"
+      - "[PARTICLE] TOTEM_OF_UNDYING 40 0.6 0.3"

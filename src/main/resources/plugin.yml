@@ -1,0 +1,40 @@
+name: EVETrolle
+version: '${project.version}'
+main: pl.eve.evetrolle.EVETrollePlugin
+api-version: '1.21.11'
+load: POSTWORLD
+authors: [EVE]
+description: Wizualne trolle administracyjne (tylko efekty po stronie gracza).
+softdepend: [LuckPerms, PlaceholderAPI]
+
+commands:
+  evetrolle:
+    description: Menu trolli administracyjnych EVETrolle
+    usage: /<command> [reload|troll <gracz> [id]|stop <gracz>|list|help]
+    aliases: [etrolle]
+    permission: evetrolle.use
+
+permissions:
+  evetrolle.use:
+    description: Dostęp do /evetrolle
+    default: op
+  evetrolle.reload:
+    description: Dostęp do /evetrolle reload
+    default: op
+  evetrolle.troll:
+    description: Możliwość używania trolli
+    default: op
+  evetrolle.notify:
+    description: Powiadomienia o użyciu trolli
+    default: op
+  evetrolle.bypass:
+    description: Ochrona przed trollami
+    default: false
+  evetrolle.admin:
+    description: Dostęp do wszystkich funkcji
+    default: op
+    children:
+      evetrolle.use: true
+      evetrolle.reload: true
+      evetrolle.troll: true
+      evetrolle.notify: true
